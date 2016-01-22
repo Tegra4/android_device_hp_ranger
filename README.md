@@ -1,4 +1,4 @@
-# Device configuration for HP Slate 21
+# Device configuration for HP Slate 21 Pro
 
 ## Spec Sheet
 | Feature                 | Specification                     |
@@ -6,19 +6,19 @@
 | CPU                     | Quad Core 1.8GHz                  |
 | Chipset                 | NVIDIA® Tegra 4 T40S              |
 | GPU                     | NVIDIA® GPU                       |
-| Memory                  | 1GB RAM                           |
+| Memory                  | 2GB RAM                           |
 | Shipped Android Version | 4.4.2                             |
-| Storage                 | 8GB                               |
+| Storage                 | 16GB                              |
 | MicroSD                 | Up to 128GB                       |
-| USB                     | 3 x USB 2.0 port                  |
-| Dimentions              | 20.9 x 13.9 x 2.63 in             |
-| Weight                  | 10.69 lb                          |
+| USB                     | 4 x USB 2.0 port                  |
+| Dimentions              | 20.9 x 14.4 x 3.9 in              |
+| Weight                  | 13.6 lb                           |
 | Display                 | 1920 x 1080 pixels                |
 | Front Camera            | WEBCAM                            |
-| Release Date            | Unknown                           |
+| Release Date            | February 2014                     |
 
 ## Device Picture
-![HP Slate 21](https://c2.staticflickr.com/8/7420/9121467331_7a4a862163_b.jpg "HP Slate 21")
+![HP Slate 21 Pro](http://www.www8-hp.com/ca/en/images/slate21pro_hero_tcm_223_1556340.jpg "HP Slate 21 Pro")
 
 ## Copyright
 
