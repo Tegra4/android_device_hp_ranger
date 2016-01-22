@@ -100,6 +100,7 @@ PRODUCT_PACKAGES += \
     init.hdcp.rc \
     init.macallan.rc \
     init.macallan.usb.rc \
+    init.ussrd.rc \
     ueventd.macallan.rc
 
 # USB
