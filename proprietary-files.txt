@@ -136,6 +136,6 @@ vendor/bin/usdwatchdog
 vendor/bin/ussrd
 
 # Wifi
-etc/nvram_4334.txt
+etc/nvram.txt
 vendor/firmware/bcm43241/fw_bcmdhd.bin
 vendor/firmware/bcm43241/fw_bcmdhd_apsta.bin
