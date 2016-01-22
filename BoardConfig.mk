@@ -25,7 +25,7 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := cortex-a15
 
 # Bootloader
-TARGET_BOOTLOADER_BOARD_NAME := dalmore
+TARGET_BOOTLOADER_BOARD_NAME := macallan
 TARGET_NO_BOOTLOADER := true
 
 # Platform
@@ -33,8 +33,8 @@ TARGET_BOARD_PLATFORM := tegra4
 
 # Kernel
 BOARD_KERNEL_CMDLINE := androidboot.selinux=permissive
-TARGET_KERNEL_SOURCE := kernel/hp/phobos
-TARGET_KERNEL_CONFIG := cyanogenmod_phobos_defconfig
+TARGET_KERNEL_SOURCE := kernel/hp/ranger
+TARGET_KERNEL_CONFIG := cyanogenmod_ranger_defconfig
 
 # Audio
 USE_LEGACY_AUDIO_POLICY := 1
@@ -42,7 +42,7 @@ USE_LEGACY_AUDIO_POLICY := 1
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR ?= device/hp/phobos/bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR ?= device/hp/ranger/bluetooth
 
 # Graphics
 USE_OPENGL_RENDERER := true
@@ -75,13 +75,13 @@ COMMON_GLOBAL_CFLAGS += \
 # Recovery
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
-TARGET_RECOVERY_DEVICE_DIRS += device/hp/phobos
-TARGET_RECOVERY_FSTAB := device/hp/phobos/rootdir/etc/fstab.dalmore
+TARGET_RECOVERY_DEVICE_DIRS += device/hp/ranger
+TARGET_RECOVERY_FSTAB := device/hp/ranger/rootdir/etc/fstab.macallan
 
 # SELinux
 include device/nvidia/sepolicy/sepolicy.mk
 BOARD_SEPOLICY_DIRS += \
-    device/hp/phobos/sepolicy
+    device/hp/ranger/sepolicy
 
 BOARD_SEPOLICY_UNION += \
     file_contexts
@@ -94,8 +94,8 @@ BOARD_WLAN_DEVICE                := bcmdhd
 BOARD_HOSTAPD_DRIVER             := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_bcmdhd
 WIFI_DRIVER_FW_PATH_PARAM        := "/sys/module/bcmdhd/parameters/firmware_path"
-WIFI_DRIVER_FW_PATH_AP           := "/system/vendor/firmware/bcm4334/fw_bcmdhd_apsta.bin"
-WIFI_DRIVER_FW_PATH_STA          := "/system/vendor/firmware/bcm4334/fw_bcmdhd.bin"
+WIFI_DRIVER_FW_PATH_AP           := "/system/vendor/firmware/bcm43241/fw_bcmdhd_apsta.bin"
+WIFI_DRIVER_FW_PATH_STA          := "/system/vendor/firmware/bcm43241/fw_bcmdhd.bin"
 
 TW_THEME := landscape_hdpi
 BOARD_HAS_NO_REAL_SDCARD := true

@@ -23,11 +23,11 @@
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
-# Inherit from phobos device
-$(call inherit-product, device/hp/phobos/device.mk)
+# Inherit from ranger device
+$(call inherit-product, device/hp/ranger/device.mk)
 
-PRODUCT_NAME := full_phobos
-PRODUCT_DEVICE := phobos
+PRODUCT_NAME := full_ranger
+PRODUCT_DEVICE := ranger
 PRODUCT_BRAND := hp
-PRODUCT_MODEL := Slate 21
+PRODUCT_MODEL := Slate 21 Pro
 PRODUCT_MANUFACTURER := Hewlett-Packard

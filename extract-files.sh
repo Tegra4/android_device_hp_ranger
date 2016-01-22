@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #set -e
-export DEVICE=phobos
+export DEVICE=ranger
 export VENDOR=hp
 
 if [ $# -eq 0 ]; then

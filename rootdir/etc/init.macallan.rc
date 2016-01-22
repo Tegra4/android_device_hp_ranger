@@ -6,13 +6,12 @@
 # documentation without an express license agreement from NVIDIA Corporation
 # is strictly prohibited.
 
-import init.dalmore.usb.rc
+import init.macallan.usb.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
 
 on init
-
     mkdir /mnt/shell/emulated 0700 shell shell
     mkdir /storage/emulated 0555 root root
     mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
@@ -30,6 +29,8 @@ on init
     symlink /mnt/shell/emulated/0 /storage/emulated/legacy
 
     # create directory for mounting usb drives
+    #mkdir /mnt/usbdrive 0666 system system
+    #symlink /mnt/usbdrive /usbdrive
     mkdir /mnt/media_rw/usbdrive 0700 media_rw media_rw
     mkdir /storage/usbdrive 0700 root root
     symlink /mnt/media_rw/usbdrive /storage/usbdrive
@@ -49,7 +50,7 @@ on fs
     setprop ro.crypto.tmpfs_options size=128m,mode=0771,uid=1000,gid=1000
     setprop ro.crypto.umount_sd false
     setprop ro.crypto.fuse_sdcard true
-    mount_all /fstab.dalmore
+    mount_all /fstab.macallan
 
 on post-fs-data
 
@@ -59,26 +60,20 @@ on post-fs-data
 
     mkdir /data/media 0770 media_rw media_rw
 
-    mkdir /data/data/mediaserver 0700 media media
-
     # Set indication (checked by vold) that we have finished this action
     setprop vold.post_fs_data_done 1
 
-# Set up HDCP
-import init.hdcp.rc
-
-# Raydium touch calibration
-on post-fs-data
-    mkdir /data/touchscreen 0755 system system
-    export TOUCH_CONF_DIR /mnt/factory/touchscreen
-    export TOUCH_DATA_DIR /data/touchscreen
+    # Create GPS folders and set its permissions
+    mkdir /data/gps
+    chown gps system /data/gps/
+    chmod 0770 /data/gps/
 
 on boot
 
     # Change back to bluetooth from system
     chown bluetooth net_bt_stack /data/misc/bluetooth
 
-    # Bluetooth UART device
+    # UART device
     chmod 0660 /dev/ttyHS2
     chown bluetooth net_bt_stack /dev/ttyHS2
 
@@ -89,16 +84,23 @@ on boot
     chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
     chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
 
-    # Bluetooth MAC address programming
+    # bluetooth MAC address programming
     chown bluetooth net_bt_stack ro.bt.bdaddr_path
     chown bluetooth net_bt_stack /system/etc/bluetooth
     chown bluetooth net_bt_stack /data/misc/bluetooth
     setprop ro.bt.bdaddr_path "/data/.bdaddr"
 
-    # Backlight
+    # Wolo audio(CTS)
+    chmod 0770 /dev/snd/hwC1D0
+    chmod 0775 /sys/devices/platform/tegra11-i2c.0/i2c-0/0-001c/codec_reg
+
+    # Wolo UART driver(CTS)
+    chmod 0775 /sys/bus/serio/drivers/WOLOUART/control
+
+    # backlight
     chown system system /sys/class/backlight/pwm-backlight/brightness
 
-    # Dim
+    # didim
     chown system system /sys/class/graphics/fb0/device/smartdimmer/enable
     chown system system /sys/class/graphics/fb0/device/smartdimmer/aggressiveness
     chown system system /sys/class/graphics/fb0/device/smartdimmer/sd_window
@@ -112,11 +114,7 @@ on boot
     chown system system /sys/kernel/tegra_cap/core_cap_level
     chown system system /sys/kernel/tegra_cap/core_cap_state
     chown system system /sys/module/cpu_tegra/parameters/cpu_user_cap
-    
-    # Memory
-    write /proc/sys/vm/min_free_kbytes 8192
-    write /proc/sys/vm/oom_kill_allocating_task  1
-        
+
     # Power management settings
     write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/no_lp 0
 
@@ -149,21 +147,18 @@ on boot
     chown system system /sys/devices/tegradc.0/enable
     chown system system /sys/devices/tegradc.1/enable
     chown system system /sys/devices/platform/host1x/nvavp/boost_sclk
-
-    chown system system /sys/kernel/tegra_cap/cbus_cap_level
-    chown system system /sys/kernel/tegra_cap/cbus_cap_state
-    chown system system /sys/devices/platform/host1x/gr3d/enable_3d_scaling
-    chown system system /sys/devices/platform/pwm-fan/pwm_cap
-
-    # TODO: Remove once powerhal takes over app profiles
-    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-
-    # Touch
     chown system system /sys/class/input/input0/enabled
     chown system system /sys/class/input/input1/enabled
     chown system system /sys/class/input/input2/enabled
 
-    # NVDPS
+    chown system system /sys/kernel/tegra_cap/cbus_cap_level
+    chown system system /sys/kernel/tegra_cap/cbus_cap_state
+    chown system system /sys/devices/platform/host1x/gr3d/enable_3d_scaling
+
+    # TODO: Remove once powerhal takes over app profiles
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+
+    # nvdps
     chown system system /sys/class/graphics/fb0/device/nvdps
 
     # Default Read Ahead value for sdcards
@@ -174,16 +169,29 @@ on boot
     write /data/misc/wminput/connected 0
     chmod 0666 /data/misc/wminput/connected
 
+    # GPS init
+    write /sys/class/gpio/export 49
+    write /sys/class/gpio/gpio49/value 0
+    write /sys/class/gpio/gpio49/direction out
+    chown root system /sys/class/gpio/gpio49/value
+    chmod 0664 /sys/class/gpio/gpio49/value
+    write /sys/class/gpio/export 189
+    write /sys/class/gpio/gpio189/direction out
+    write /sys/class/gpio/gpio189/value 1
+    chown root system /sys/class/gpio/gpio189/value
+    chmod 0664 /sys/class/gpio/gpio189/value
+
+    # EDP attributes
+    write /sys/power/edp/battery/backlight/notify 1
+    write /sys/power/edp/battery/imx091/notify 1
+    write /sys/power/edp/battery/speaker/notify 1
+
 # CPU Boost: boost CPU on input events
 service input-cfboost /system/bin/input_cfboost_init.sh
     class main
     user root
     group root
     oneshot
-
-# Raydium touch calibration
-on property:ro.debuggable=1
-    chmod 0666 /sys/devices/virtual/misc/raydium_ts/self_test
 
 on property:ro.debuggable=1
     # EMC debug interface
@@ -253,35 +261,39 @@ service fuse_usbdrive2 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_
     class late_start
     disabled
 
-# btmacwriter - to create unique BD address
-service btmacwriter /system/bin/btmacwriter
-    class main
-    user bluetooth
-    group bluetooth net_bt_admin
-    oneshot
-
 # Mount usb drives as /usbdrive. Generally usb drives are formatted with FAT
 # filesystem, so we support FAT as of now.
 on device-added-/sys/block/sda
-    mount auto /dev/block/sda /mnt/media_rw/usbdrive
+    mount vfat /dev/block/sda /mnt/media_rw/usbdrive
 
 on device-removed-/sys/block/sda
     umount /mnt/media_rw/usbdrive
     
 on device-added-/sys/block/sdb
-    mount auto /dev/block/sdb /mnt/media_rw/usbdrive1
+    mount vfat /dev/block/sdb /mnt/media_rw/usbdrive1
 
 on device-removed-/sys/block/sdb
     umount /mnt/media_rw/usbdrive1
     
 on device-added-/sys/block/sdc
-    mount auto /dev/block/sdc /mnt/media_rw/usbdrive2
+    mount vfat /dev/block/sdc /mnt/media_rw/usbdrive2
 
 on device-removed-/sys/block/sdc
     umount /mnt/media_rw/usbdrive2
     
 on property:init.svc.hciattach=stopped
     write /sys/devices/platform/reg-userspace-consumer.1/state disabled
+
+# Start GPS daemon
+on boot
+    service gps-daemon /system/bin/glgps_nvidiaTegra2android -c /system/etc/gps/gpsconfig.xml
+    user gps
+    socket gps seqpacket 0660 gps system
+    group system inet sdcard_rw sdcard_r
+    class late_start
+
+# Set up HDCP
+import init.hdcp.rc
 
 # Raydium touch setting
 service rm_ts_service /system/bin/rm_ts_server
@@ -353,3 +365,4 @@ service tf_daemon /system/bin/tf_daemon -storageDir /data/tf -d
 # may restart due to /data/tf not existing yet
 on property:init.svc.tf_daemon=restarting
     mkdir /data/tf
+

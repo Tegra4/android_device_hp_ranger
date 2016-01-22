@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ifneq ($(filter phobos,$(TARGET_DEVICE)),)
+ifneq ($(filter ranger,$(TARGET_DEVICE)),)
 
 LOCAL_PATH := $(call my-dir)
 

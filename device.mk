@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-$(call inherit-product-if-exists, vendor/hp/phobos/phobos-vendor.mk)
+$(call inherit-product-if-exists, vendor/hp/ranger/ranger-vendor.mk)
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
@@ -81,7 +81,7 @@ PRODUCT_COPY_FILES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    lights.phobos
+    lights.ranger
 
 # Media config
 PRODUCT_COPY_FILES += \
@@ -92,11 +92,11 @@ PRODUCT_COPY_FILES += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    fstab.dalmore \
-    init.dalmore.rc \
-    init.dalmore.usb.rc \
+    fstab.macallan \
     init.hdcp.rc \
-    ueventd.dalmore.rc
+    init.macallan.rc \
+    init.macallan.usb.rc \
+    ueventd.macallan.rc
 
 # USB
 PRODUCT_PACKAGES += \
