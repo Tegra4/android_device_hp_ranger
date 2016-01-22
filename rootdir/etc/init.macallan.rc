@@ -63,11 +63,6 @@ on post-fs-data
     # Set indication (checked by vold) that we have finished this action
     setprop vold.post_fs_data_done 1
 
-    # Create GPS folders and set its permissions
-    mkdir /data/gps
-    chown gps system /data/gps/
-    chmod 0770 /data/gps/
-
 on boot
 
     # Change back to bluetooth from system
@@ -168,18 +163,6 @@ on boot
     # Wiimote connect status
     write /data/misc/wminput/connected 0
     chmod 0666 /data/misc/wminput/connected
-
-    # GPS init
-    write /sys/class/gpio/export 49
-    write /sys/class/gpio/gpio49/value 0
-    write /sys/class/gpio/gpio49/direction out
-    chown root system /sys/class/gpio/gpio49/value
-    chmod 0664 /sys/class/gpio/gpio49/value
-    write /sys/class/gpio/export 189
-    write /sys/class/gpio/gpio189/direction out
-    write /sys/class/gpio/gpio189/value 1
-    chown root system /sys/class/gpio/gpio189/value
-    chmod 0664 /sys/class/gpio/gpio189/value
 
     # EDP attributes
     write /sys/power/edp/battery/backlight/notify 1
@@ -283,14 +266,6 @@ on device-removed-/sys/block/sdc
     
 on property:init.svc.hciattach=stopped
     write /sys/devices/platform/reg-userspace-consumer.1/state disabled
-
-# Start GPS daemon
-on boot
-    service gps-daemon /system/bin/glgps_nvidiaTegra2android -c /system/etc/gps/gpsconfig.xml
-    user gps
-    socket gps seqpacket 0660 gps system
-    group system inet sdcard_rw sdcard_r
-    class late_start
 
 # Set up HDCP
 import init.hdcp.rc
