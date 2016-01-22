@@ -10,7 +10,7 @@
 | Shipped Android Version | 4.4.2                             |
 | Storage                 | 16GB                              |
 | MicroSD                 | Up to 128GB                       |
-| USB                     | 4 x USB 2.0 port                  |
+| USB                     | 3 x USB 2.0 port                  |
 | Dimentions              | 20.9 x 14.4 x 3.9 in              |
 | Weight                  | 13.6 lb                           |
 | Display                 | 1920 x 1080 pixels                |
